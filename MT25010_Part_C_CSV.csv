@@ -1,0 +1,7 @@
+Program,Worker,Avg_CPU_Percent,Disk_Read_kBps,Disk_Write_kBps,Time_sec
+ProgramA,cpu,0,2668.42,322.95,0.00
+ProgramA,mem,0,2658.4,329.87,0.01
+ProgramA,io,0,2648.4,380.69,0.03
+ProgramB,cpu,0,2878.37,319.6,0.00
+ProgramB,mem,0,8831.39,683.65,0.01
+ProgramB,io,0,2629.79,319.14,0.02
