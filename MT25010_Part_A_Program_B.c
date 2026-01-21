@@ -28,23 +28,37 @@ void* thread_runner(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <cpu|mem|io>\n", argv[0]);
+
+    if (argc != 3) {
+        printf("Usage: %s <cpu|mem|io> <num_threads>\n", argv[0]);
         return 1;
     }
 
-    pthread_t threads[2];
-    thread_arg_t args[2];
+    char *type = argv[1];
+    int num_threads = atoi(argv[2]);
 
-    long count = 9 * 1000;
-
-    for (int i = 0; i < 2; i++) {
-        strcpy(args[i].type, argv[1]);
-        args[i].count = count;
-        pthread_create(&threads[i], NULL, thread_runner, &args[i]);
+    if (num_threads <= 0) {
+        printf("Number of threads must be > 0\n");
+        return 1;
     }
 
-    for (int i = 0; i < 2; i++) {
+    pthread_t threads[num_threads];
+    thread_arg_t args[num_threads];
+
+    /* Roll number last digit = 0 → use 9 */
+    long count = 9 * 1000;
+
+    for (int i = 0; i < num_threads; i++) {
+        strcpy(args[i].type, type);
+        args[i].count = count;
+
+        if (pthread_create(&threads[i], NULL, thread_runner, &args[i]) != 0) {
+            perror("pthread_create failed");
+            return 1;
+        }
+    }
+
+    for (int i = 0; i < num_threads; i++) {
         pthread_join(threads[i], NULL);
     }
 
